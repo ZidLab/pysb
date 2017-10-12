@@ -911,6 +911,11 @@ class Rule(Component):
         co-transport anything connected to that Monomer by a path in the same
         compartment. If False (default), connected Monomers will remain where
         they were.
+    total_rate: bool, optional
+        If True, the rate is considered to be macroscropic and is not
+        multiplied by the number of reactant molecules during simulation in
+        NFSim. If False (default), the rate is multiplied by number of reactant
+        molecules.
 
     Attributes
     ----------
@@ -922,7 +927,7 @@ class Rule(Component):
 
     def __init__(self, name, rule_expression, rate_forward, rate_reverse=None,
                  delete_molecules=False, move_connected=False,
-                 _export=True):
+                 _export=True, total_rate=False):
         Component.__init__(self, name, _export)
         if not isinstance(rule_expression, RuleExpression):
             raise Exception("rule_expression is not a RuleExpression object")
@@ -937,6 +942,7 @@ class Rule(Component):
         self.rate_reverse = rate_reverse
         self.delete_molecules = delete_molecules
         self.move_connected = move_connected
+        self.total_rate = total_rate 
         # TODO: ensure all numbered sites are referenced exactly twice within each of reactants and products
 
     def is_synth(self):
