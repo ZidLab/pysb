@@ -913,8 +913,8 @@ class Rule(Component):
         they were.
     total_rate: bool, optional
         If True, the rate is considered to be macroscropic and is not
-        multiplied by the number of reactant molecules during simulation in
-        NFSim. If False (default), the rate is multiplied by number of reactant
+        multiplied by the number of reactant molecules during simulation. 
+        If False (default), the rate is multiplied by number of reactant
         molecules.
 
     Attributes
