@@ -105,7 +105,7 @@ class BngSimulator(Simulator):
             model_additional_species = None
 
         additional_args['method'] = method
-        additional_args['print_functions'] = True
+        additional_args['print_functions'] = False
         verbose_bool = self._logger.logger.getEffectiveLevel() <= logging.DEBUG
         extended_debug = self._logger.logger.getEffectiveLevel() <= \
                          EXTENDED_DEBUG
