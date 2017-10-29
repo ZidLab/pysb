@@ -212,6 +212,10 @@ class Monomer(Component):
         Allowable states for sites. Keys are sites and values are lists of
         states. Sites which only take part in bond formation and never take on a
         state may be omitted.
+        For NFSim-simulations, site_states can also be given as a range
+        to accommodate integer-value states that can be incremented or 
+        decremented. This works only Python 3+ where 'range' is interpreted
+        as a type rather than converted to list as done in Python 2.x.
 
     Attributes
     ----------
@@ -263,11 +267,12 @@ class Monomer(Component):
                             str(unknown_sites))
         # ensure site_states values are all strings
         invalid_sites = [site for (site, states) in site_states.items()
-                              if not all([isinstance(s, basestring)
+                              if not all([isinstance(s, basestring) or 
+                                          isinstance(s, range)
                                           for s in states])]
         if invalid_sites:
-            raise Exception("Non-string state values in site_states for "
-                            "sites: " + str(invalid_sites))
+            raise Exception("Non-string and non-range state values in "
+                            "site_states for sites: " + str(invalid_sites))
 
         self.sites = list(sites)
         self.site_states = site_states
@@ -912,10 +917,11 @@ class Rule(Component):
         compartment. If False (default), connected Monomers will remain where
         they were.
     total_rate: bool, optional
-        If True, the rate is considered to be macroscropic and is not
+        If True, the rate is considered to be macroscopic and is not
         multiplied by the number of reactant molecules during simulation. 
         If False (default), the rate is multiplied by number of reactant
         molecules.
+        Keyword is used by Bionetgen only for NFSim.
 
     Attributes
     ----------
