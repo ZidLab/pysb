@@ -111,6 +111,8 @@ class BngGenerator(object):
                 self.__content += ' MoveConnected'
             if r.total_rate:
                 self.__content += ' TotalRate'
+            if r.tag:
+                self.__content += ' Tag'
             self.__content += "\n"
         self.__content += "end reaction rules\n\n"
 
@@ -180,7 +182,13 @@ def format_monomer_site(monomer, site):
     ret = site
     if site in monomer.site_states:
         for state in monomer.site_states[site]:
-            ret += '~' + state
+            # For integer-valued states used only in NFSim
+            if isinstance(state, range):
+                ret += '~{start}~{stop}~PLUS~MINUS'.format(
+                        start=state.start+1, stop=state.stop)
+            # For string-valued states
+            else:
+                ret += '~' + state
     return ret
 
 def format_reactionpattern(rp, for_observable=False):

@@ -265,7 +265,7 @@ class Monomer(Component):
         if unknown_sites:
             raise Exception("Unknown sites in site_states: " +
                             str(unknown_sites))
-        # ensure site_states values are all strings
+        # ensure site_states values are all strings or ranges
         invalid_sites = [site for (site, states) in site_states.items()
                               if not all([isinstance(s, basestring) or 
                                           isinstance(s, range)
@@ -922,6 +922,11 @@ class Rule(Component):
         If False (default), the rate is multiplied by number of reactant
         molecules.
         Keyword is used by Bionetgen only for NFSim.
+    tag: bool, optional
+        If True, time and molecule ids are recorded every time this
+        rule is fired.
+        default: False
+        Keyword is used by Bionetgen only for NFSim.
 
     Attributes
     ----------
@@ -933,7 +938,7 @@ class Rule(Component):
 
     def __init__(self, name, rule_expression, rate_forward, rate_reverse=None,
                  delete_molecules=False, move_connected=False,
-                 _export=True, total_rate=False):
+                 _export=True, total_rate=False, tag=False):
         Component.__init__(self, name, _export)
         if not isinstance(rule_expression, RuleExpression):
             raise Exception("rule_expression is not a RuleExpression object")
@@ -949,6 +954,7 @@ class Rule(Component):
         self.delete_molecules = delete_molecules
         self.move_connected = move_connected
         self.total_rate = total_rate 
+        self.tag = tag 
         # TODO: ensure all numbered sites are referenced exactly twice within each of reactants and products
 
     def is_synth(self):
